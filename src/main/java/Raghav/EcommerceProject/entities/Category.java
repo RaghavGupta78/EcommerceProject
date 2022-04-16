@@ -1,8 +1,6 @@
 package Raghav.EcommerceProject.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class Category {
@@ -12,13 +10,20 @@ public class Category {
     private String name;
 
     //foreign ??????
-    private int parent_category_id;
+    //private int parent_category_id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parent_category_id",referencedColumnName = "id")
+    private ParentCategory parentCategory;
 
 
-    @OneToOne(mappedBy = "category")
-    private CategoryMetadataFieldValues categoryMetadataFieldValues;
+    public ParentCategory getParentCategory() {
+        return parentCategory;
+    }
 
-
+    public void setParentCategory(ParentCategory parentCategory) {
+        this.parentCategory = parentCategory;
+    }
 
     public int getId() {
         return id;
@@ -36,11 +41,5 @@ public class Category {
         this.name = name;
     }
 
-    public int getParent_category_id() {
-        return parent_category_id;
-    }
 
-    public void setParent_category_id(int parent_category_id) {
-        this.parent_category_id = parent_category_id;
-    }
 }

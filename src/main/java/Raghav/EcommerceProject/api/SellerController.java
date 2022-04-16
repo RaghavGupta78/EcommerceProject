@@ -4,11 +4,19 @@ import Raghav.EcommerceProject.ModelRequest.RequestPassword;
 import Raghav.EcommerceProject.entities.Address;
 import Raghav.EcommerceProject.entities.Seller;
 import Raghav.EcommerceProject.entities.User;
+import Raghav.EcommerceProject.exceptions.InvalidTokenException;
+import Raghav.EcommerceProject.exceptions.PasswordValidationException;
+import Raghav.EcommerceProject.repositories.AccessTokenRepository;
 import Raghav.EcommerceProject.repositories.AddressRepository;
 import Raghav.EcommerceProject.repositories.SellerRepository;
 import Raghav.EcommerceProject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/seller")
@@ -24,48 +32,47 @@ public class SellerController {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private AccessTokenRepository accessTokenRepository;
+
+    @Value("${file.upload-dir}")
+    String FILE_DIRECTORY;
+
+
 
     //view profile
     @GetMapping("/view-profile/{id}")
-    public Seller viewProfile(@PathVariable("id") Integer id){
+    public Seller viewProfile(HttpServletRequest request, @PathVariable("id") Integer id) throws IOException, InvalidTokenException {
+
+
+        String requestTokenHeader = request.getHeader("Authorization");
+        String jwtToken = null;
+        jwtToken = requestTokenHeader.substring(7);
+
+        if(!accessTokenRepository.findByAccessTokenName(jwtToken).getAccessTokenName().equals(jwtToken)){
+            throw new InvalidTokenException("THE TOKEN YOU ENTERED IS INVALID");
+        }
 
         Seller s1 = sellerRepository.findById(id).get();
-        Seller s2 = new Seller();
-        s2.setId(s1.getId());
-        s2.setFirstName(s1.getFirstName());
-        s2.setLastName(s1.getLastName());
 
-        User uTemp = s1.getUser();
-        User u2 = new User();
-        u2.setActive(uTemp.isActive());
-
-        Address a1 = uTemp.getAddress();
-        Address a2 = new Address();
-        a2.setZip_code(a1.getZip_code());
-        a2.setState(a1.getState());
-        a2.setCity(a1.getCity());
-        a2.setCountry(a1.getCountry());
-        a2.setAddress_line(a1.getAddress_line());
-        a2.setLabel(a1.getLabel());
-
-        u2.setAddress(a2);
-
-
-        s2.setUser(u2);
-
-
-        s2.setCompany_name(s1.getCompany_name());
-        s2.setGst(s1.getGst());
-        s2.setCompanyAddress(s1.getCompanyAddress());
-
-        return s2;
+        return s1;
 
     }
 
 
     //update-profile
     @PutMapping("/update-profile/{id}")
-    public Seller updateProfile(@PathVariable("id") Integer id,@RequestBody Seller seller){
+    public Seller updateProfile(HttpServletRequest request,@PathVariable("id") Integer id,@RequestBody Seller seller) throws InvalidTokenException {
+
+
+        String requestTokenHeader = request.getHeader("Authorization");
+        String jwtToken = null;
+        jwtToken = requestTokenHeader.substring(7);
+
+        if(!accessTokenRepository.findByAccessTokenName(jwtToken).getAccessTokenName().equals(jwtToken)){
+            throw new InvalidTokenException("THE TOKEN YOU ENTERED IS INVALID");
+        }
+
 
 
         Seller s1 = sellerRepository.findById(id).get();
@@ -94,7 +101,19 @@ public class SellerController {
 
     //update password
     @PutMapping("/update-password/{id}")
-    public Seller updatePassword(@PathVariable("id") Integer id, @RequestBody RequestPassword requestPassword){
+    public Seller updatePassword(HttpServletRequest request,@PathVariable("id") Integer id, @RequestBody RequestPassword requestPassword) throws InvalidTokenException, PasswordValidationException {
+
+
+        String requestTokenHeader = request.getHeader("Authorization");
+        String jwtToken = null;
+        jwtToken = requestTokenHeader.substring(7);
+
+        if(!accessTokenRepository.findByAccessTokenName(jwtToken).getAccessTokenName().equals(jwtToken)){
+            throw new InvalidTokenException("THE TOKEN YOU ENTERED IS INVALID");
+        }
+        if(!requestPassword.getPassword().equals(requestPassword.getConfirmPassword())){
+            throw new PasswordValidationException("PASSWORD VALIDATION FILLED");
+        }
 
         Seller s1 = sellerRepository.findById(id).get();
         s1.setPassword(requestPassword.getPassword());
@@ -107,7 +126,16 @@ public class SellerController {
 
     //update address
     @PutMapping("/update-address/{id}")
-    private Seller updateAddress(@PathVariable("id") Integer id,@RequestBody Address address){
+    private Seller updateAddress(HttpServletRequest request,@PathVariable("id") Integer id,@RequestBody Address address) throws InvalidTokenException {
+
+
+        String requestTokenHeader = request.getHeader("Authorization");
+        String jwtToken = null;
+        jwtToken = requestTokenHeader.substring(7);
+
+        if(!accessTokenRepository.findByAccessTokenName(jwtToken).getAccessTokenName().equals(jwtToken)){
+            throw new InvalidTokenException("THE TOKEN YOU ENTERED IS INVALID");
+        }
 
 
         Seller s1 = sellerRepository.findById(id).get();

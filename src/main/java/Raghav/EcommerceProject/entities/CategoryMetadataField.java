@@ -1,8 +1,6 @@
 package Raghav.EcommerceProject.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class CategoryMetadataField {
@@ -11,9 +9,17 @@ public class CategoryMetadataField {
     private int id;
     private String name;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    private Category category;
 
-    @OneToOne(mappedBy = "categoryMetadataField")
-    private CategoryMetadataFieldValues categoryMetadataFieldValues;
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public int getId() {
         return id;

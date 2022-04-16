@@ -1,5 +1,7 @@
 package Raghav.EcommerceProject.ModelResponse;
 
+import java.io.File;
+
 public class CustomerResponse {
 
     private int id;
@@ -7,8 +9,15 @@ public class CustomerResponse {
     private String lastName;
     private boolean active;
     private String contact;
+    private File file;
 
+    public File getFile() {
+        return file;
+    }
 
+    public void setFile(File file) {
+        this.file = file;
+    }
 
     public int getId() {
         return id;

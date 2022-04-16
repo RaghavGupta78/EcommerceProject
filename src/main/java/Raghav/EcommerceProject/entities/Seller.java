@@ -1,6 +1,8 @@
 package Raghav.EcommerceProject.entities;
 
 import javax.persistence.*;
+import java.io.File;
+import java.util.Set;
 
 @Entity
 public class Seller {
@@ -10,8 +12,23 @@ public class Seller {
     @Id
     private int id;
     private double gst;
+    @Column(nullable = false,unique = true)
     private String contact_number;
+    @Column(nullable = false,unique = true)
     private String company_name;
+
+//    @ManyToMany(mappedBy = "products")
+//    private Set<Seller> sellers;
+
+    private File file;
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
 
     //foreign value from user table
     // private int user_id;
@@ -26,7 +43,7 @@ public class Seller {
     private String password;
     @Column(nullable = false)
     private String confirmPassword;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String companyAddress;
     @Column(nullable = false)
     private String firstName;

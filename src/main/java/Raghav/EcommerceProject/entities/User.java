@@ -9,10 +9,15 @@ public class User {
 
     @Id
     private int id;
+    @Column(unique=true ,nullable = false)
     private String email;
+    @Column(nullable = false)
     private String first_name;
+    @Column(nullable = false)
     private String middle_name;
+    @Column(nullable = false)
     private String last_name;
+    @Column(nullable = false)
     private String password;
     private boolean deleted;
     private boolean active;
@@ -32,6 +37,8 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Customer customer;
+
+
 
 
     @OneToOne(cascade = CascadeType.ALL)

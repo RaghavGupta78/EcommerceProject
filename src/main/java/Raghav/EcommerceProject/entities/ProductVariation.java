@@ -77,4 +77,20 @@ public class ProductVariation {
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
 }

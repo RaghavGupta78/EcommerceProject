@@ -9,8 +9,17 @@ public class Product {
 
     @Id
     private int id;
-     //foreign value
-     //private int seller_user_id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id",referencedColumnName = "id")
+    private Seller seller;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    private Category category;
+
+
+
     private String name;
     private String description;
 
@@ -23,9 +32,6 @@ public class Product {
     private boolean is_active;
     private boolean is_deleted;
 
-   // @ManyToOne
-    //@JoinColumn(name = "seller_user_id")
-    //private Seller seller_user_id;
 
 
 
@@ -100,5 +106,21 @@ public class Product {
 
     public void setIs_deleted(boolean is_deleted) {
         this.is_deleted = is_deleted;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

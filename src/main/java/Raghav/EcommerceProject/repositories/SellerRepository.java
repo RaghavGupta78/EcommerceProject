@@ -11,4 +11,6 @@ public interface SellerRepository extends JpaRepository<Seller,Integer> {
 
     @Query(value = "select * from seller",nativeQuery = true)
     List<Seller> findAllSeller();
+
+    Seller findByEmail(String username);
 }
